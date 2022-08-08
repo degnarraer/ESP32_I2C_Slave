@@ -108,15 +108,15 @@ void TwoWireSlave::update()
         rxIndex = 0;
 
         // call user callback
-        if (user_onReceive) {
-            user_onReceive(rxLength);
+        if (m_Notifiee) {
+            m_Notifiee->ReceiveEvent(rxLength);
         }
     }
-    else if (user_onRequest) {
+    else if (m_Notifiee) {
         txIndex = 0;
         txLength = 0;
         packer_.reset();
-        user_onRequest();
+        m_Notifiee->RequestEvent();
         packer_.end();
 
         while (packer_.available()) {
@@ -183,16 +183,6 @@ void TwoWireSlave::flush(void)
     txQueued = 0;
     i2c_reset_rx_fifo(portNum);
     i2c_reset_tx_fifo(portNum);
-}
-
-void TwoWireSlave::onReceive(void (*function)(int))
-{
-    user_onReceive = function;
-}
-
-void TwoWireSlave::onRequest(void (*function)(void))
-{
-    user_onRequest = function;
 }
 
 TwoWireSlave WireSlave = TwoWireSlave(0);
