@@ -32,7 +32,7 @@
 
 #define I2C_BUFFER_LENGTH 128
 
-class TwoWireSlaveNotifiee
+class TwoWireSlaveNotifier
 {
   public:
 	virtual void RequestEvent() = 0;
@@ -77,7 +77,7 @@ class TwoWireSlave : public Stream
         return write((uint8_t)n);
     }
     
-	void RegisterForNotification(TwoWireSlaveNotifiee *Notifiee)
+	void RegisterForNotification(TwoWireSlaveNotifier *Notifiee)
 	{
 		m_Notifiee = Notifiee;
 	}
@@ -99,7 +99,7 @@ private:
     uint16_t txAddress;
     uint16_t txQueued;
 
-	TwoWireSlaveNotifiee *m_Notifiee = NULL;
+	TwoWireSlaveNotifier *m_Notifiee = NULL;
 
     WirePacker packer_;
     WireUnpacker unpacker_;
